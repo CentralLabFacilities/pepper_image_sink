@@ -1,0 +1,29 @@
+<package>
+  <name>pepper_image_sink</name>
+  <version>0.1.10</version>
+  <description>Package for Pepper Image Sink.</description>
+  <maintainer email="kkonen@uni-bielefeld.de">Kai Konen</maintainer>
+  <author>Kai Konen</author>
+  <author>Robert Feldhans</author>
+
+  <license>BSD</license>
+  <url type="website">www.cit-ec.de</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>nodelet</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+
+  <run_depend>nodelet</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>cv_bridge</run_depend>
+
+  <export>
+    <nodelet plugin="${prefix}/pepper_image_sink.xml"/>
+  </export>
+</package>
+
+
