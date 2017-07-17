@@ -2,7 +2,7 @@
   <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
 
   <node pkg="nodelet" type="nodelet" name="PepperImageSink" args="load pepper_image_sink/PepperImageSink standalone_nodelet --no-bond" output="screen">
-    <remap from="PepperImageSink/out" to="/pepper_robot/relay/front/image_raw"/>
+    <remap from="PepperImageSink/out" to="/pepper_robot/sink/front/image_raw"/>
     <remap from="PepperImageSink/in" to="/pepper_robot/camera/front/image_raw/compressed"/>
   </node>
 </launch>
