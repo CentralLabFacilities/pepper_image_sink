@@ -5,4 +5,7 @@
     <remap from="PepperImageSink/out" to="/pepper_robot/sink/front/image_raw"/>
     <remap from="PepperImageSink/in" to="/pepper_robot/camera/front/image_raw/compressed"/>
   </node>
+
+  <node pkg="image_transport" type="republish" name="republish_depth_compressed" args="compressed in:=/pepper_robot/sink/depth/image_compressed  raw out:=/pepper_robot/sink/depth/uncompressed" output="screen" />
+
 </launch>
