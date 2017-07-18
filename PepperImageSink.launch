@@ -1,11 +1,7 @@
 <launch>
-  <node pkg="nodelet" type="nodelet" name="standalone_nodelet"  args="manager" output="screen"/>
 
-  <node pkg="nodelet" type="nodelet" name="PepperImageSink" args="load pepper_image_sink/PepperImageSink standalone_nodelet --no-bond" output="screen">
-    <remap from="PepperImageSink/out" to="/pepper_robot/sink/front/image_raw"/>
-    <remap from="PepperImageSink/in" to="/pepper_robot/camera/front/image_raw/compressed"/>
-  </node>
+  <node pkg="image_transport" type="republish" name="depth_uncompressor" args="compressed in:=/pepper_robot/sink/depth raw out:=/pepper_robot/sink/depth/image_raw" output="screen" />
 
-  <node pkg="image_transport" type="republish" name="republish_depth_compressed" args="compressed in:=/pepper_robot/sink/depth/image_compressed  raw out:=/pepper_robot/sink/depth/uncompressed" output="screen" />
+  <node pkg="image_transport" type="republish" name="front_uncompressor" args="compressed in:=/pepper_robot/sink/front raw out:=/pepper_robot/sink/front/image_raw" output="screen" />
 
 </launch>
