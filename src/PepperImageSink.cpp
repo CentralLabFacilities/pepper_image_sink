@@ -40,7 +40,7 @@ namespace pepper_image_sink {
 
     class PepperImageSink : public nodelet::Nodelet {
     public:
-        PepperImageSink(){}
+        PepperImageSink() {}
 
     private:
         virtual void onInit() {
@@ -61,26 +61,25 @@ namespace pepper_image_sink {
         }
 
         void callback(const sensor_msgs::CompressedImage::ConstPtr &input) {
-            if (stream) {
-                try {
-                    cv_ptr = cv_bridge::toCvCopy(input);
-                }
-                catch (cv_bridge::Exception &e) {
-                    ROS_ERROR("cv_bridge exception: %s", e.what());
-                    return;
-                }
-
-
-                try {
-                    output = cv_ptr->toImageMsg();
-                }
-                catch (cv_bridge::Exception &e) {
-                    ROS_ERROR("cv_bridge !exception: %s", e.what());
-                    return;
-                }
-                pub.publish(output);
+            try {
+                cv_ptr = cv_bridge::toCvCopy(input);
             }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge exception: %s", e.what());
+                return;
+            }
+
+
+            try {
+                output = cv_ptr->toImageMsg();
+            }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge !exception: %s", e.what());
+                return;
+            }
+            pub.publish(output);
         }
+
 
         ros::Publisher pub;
         ros::Subscriber sub;
