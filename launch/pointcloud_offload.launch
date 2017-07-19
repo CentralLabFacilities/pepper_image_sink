@@ -11,10 +11,8 @@
         <remap from="depth/camera_info" to="/pepper_robot/camera/depth/camera/camera_info"/>
         <remap from="depth/image_rect" to="/pepper_robot/sink/depth/image_raw"/>
         <remap from="depth_registered/camera_info" to="/pepper_robot/sink/depth_registered/camera_info"/>
-        <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>  
-
-        <param name="queue_size" value="5"/>
-        
+        <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
+        <param name="queue_size" value="15"/>
     </node>
 
     <node pkg="nodelet" type="nodelet" name="cloudify_offload" output="screen"
@@ -24,7 +22,6 @@
         <remap from="rgb/image_rect_color" to="/pepper_robot/sink/front/image_raw"/>
         <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
         <remap from="depth_registered/points" to="/pepper_robot/sink/depth/points"/>
-
         <param name="queue_size" value="15"/>
     </node>
 
