@@ -1,7 +1,8 @@
 <launch>
-
-  <node pkg="image_transport" type="republish" name="depth_uncompressor" args="compressed in:=/pepper_robot/camera/depth/camera/image_raw raw out:=/pepper_robot/sink/depth/image_raw" output="screen" />
-
-  <node pkg="image_transport" type="republish" name="front_uncompressor" args="compressed in:=/pepper_robot/camera/front/image_raw raw out:=/pepper_robot/sink/front/image_raw" output="screen" />
-
+    <node pkg="image_transport" type="republish" name="depth_uncompressor"
+          args="compressed in:=/pepper_robot/camera/depth/camera/image_raw raw out:=/pepper_robot/sink/depth/image_raw"
+          output="screen"/>
+    <node pkg="image_transport" type="republish" name="front_uncompressor"
+          args="compressed in:=/pepper_robot/camera/front/image_raw raw out:=/pepper_robot/sink/front/image_raw"
+          output="screen"/>
 </launch>
