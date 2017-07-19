@@ -1,5 +1,4 @@
 <launch>
-
     <node pkg="nodelet" type="nodelet" name="depth_manager_offload" args="manager">
         <param name="num_worker_threads" value="4" />
     </node>
@@ -24,6 +23,5 @@
         <remap from="depth_registered/points" to="/pepper_robot/sink/depth/points"/>
         <param name="queue_size" value="15"/>
     </node>
-
 </launch>
 
