@@ -1,7 +1,7 @@
 <library path="lib/libpepper_image_sink">
   <class name="pepper_image_sink/PepperImageSink" type="pepper_image_sink::PepperImageSink" base_class_type="nodelet::Nodelet">
     <description> 
-      A node to convert compressed images to raw images
+      Nodelet to distribute images without causing uneccessary network traffic
     </description>
   </class>
 </library>

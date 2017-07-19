@@ -32,49 +32,61 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CompressedImage.h>
+#include <std_msgs/Empty.h>
 #include <cv_bridge/cv_bridge.h>
+#include <object_tracking_msgs/Recognize.h>
 
 namespace pepper_image_sink {
 
     class PepperImageSink : public nodelet::Nodelet {
     public:
-        PepperImageSink()
-                : value_(0) {}
+        PepperImageSink(){}
 
     private:
         virtual void onInit() {
-            ros::NodeHandle &private_nh = getPrivateNodeHandle();
-            private_nh.getParam("value", value_);
+            private_nh = getPrivateNodeHandle();
+            stream = true;
             pub = private_nh.advertise<sensor_msgs::Image>("out", 10);
             sub = private_nh.subscribe("in", 10, &PepperImageSink::callback, this);
+            service = private_nh.advertiseService("image_stream_toggle", &PepperImageSink::toggle_cb, this);
+        }
+
+        bool toggle_cb(object_tracking_msgs::Recognize::Request &req, object_tracking_msgs::Recognize::Response &res) {
+            stream = !stream;
+            if (!stream) {
+                sub.shutdown();
+            } else {
+                sub = private_nh.subscribe("in", 10, &PepperImageSink::callback, this);
+            }
         }
 
         void callback(const sensor_msgs::CompressedImage::ConstPtr &input) {
-            try {
-                this->cv_ptr = cv_bridge::toCvCopy(input);
-                //ROS_INFO("callback1");
-            }
-            catch (cv_bridge::Exception &e) {
-                ROS_ERROR("cv_bridge exception: %s", e.what());
-                return;
-            }
+            if (stream) {
+                try {
+                    this->cv_ptr = cv_bridge::toCvCopy(input);
+                }
+                catch (cv_bridge::Exception &e) {
+                    ROS_ERROR("cv_bridge exception: %s", e.what());
+                    return;
+                }
 
 
-            try {
-                this->output = this->cv_ptr->toImageMsg();
-                //ROS_INFO("callback2");
-
+                try {
+                    this->output = this->cv_ptr->toImageMsg();
+                }
+                catch (cv_bridge::Exception &e) {
+                    ROS_ERROR("cv_bridge !exception: %s", e.what());
+                    return;
+                }
+                pub.publish(this->output);
             }
-            catch (cv_bridge::Exception &e) {
-                ROS_ERROR("cv_bridge !exception: %s", e.what());
-                return;
-            }
-            pub.publish(this->output);
         }
 
         ros::Publisher pub;
         ros::Subscriber sub;
-        double value_;
+        ros::ServiceServer service;
+        ros::NodeHandle private_nh;
+        bool stream;
         cv_bridge::CvImagePtr cv_ptr;
         sensor_msgs::ImagePtr output;
     };
