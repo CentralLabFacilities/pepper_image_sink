@@ -26,3 +26,7 @@ target_link_libraries(head_depth_compressor
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(FILES pepper_image_sink.xml launch/pepper_image_sink.launch launch/pointcloud_offload.launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+  install(TARGETS head_depth_compressor
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
