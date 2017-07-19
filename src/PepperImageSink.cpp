@@ -63,7 +63,7 @@ namespace pepper_image_sink {
         void callback(const sensor_msgs::CompressedImage::ConstPtr &input) {
             if (stream) {
                 try {
-                    this->cv_ptr = cv_bridge::toCvCopy(input);
+                    cv_ptr = cv_bridge::toCvCopy(input);
                 }
                 catch (cv_bridge::Exception &e) {
                     ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -72,13 +72,13 @@ namespace pepper_image_sink {
 
 
                 try {
-                    this->output = this->cv_ptr->toImageMsg();
+                    output = cv_ptr->toImageMsg();
                 }
                 catch (cv_bridge::Exception &e) {
                     ROS_ERROR("cv_bridge !exception: %s", e.what());
                     return;
                 }
-                pub.publish(this->output);
+                pub.publish(output);
             }
         }
 
