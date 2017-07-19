@@ -141,6 +141,7 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
                 input->encoding.c_str());
 
     }
+    pub_ptr.get()->publish(compressed);
 }
 
 int main(int argc, char **argv) {
@@ -154,7 +155,10 @@ int main(int argc, char **argv) {
 
     pub_ptr.reset(new ros::Publisher(nh.advertise<sensor_msgs::CompressedImage>("/pepper_robot/camera/depth/camera/image_raw/compressed", 10)));
 
-    ros::spin();
+    while(ros::ok()){
+        ros::Duration(0.06).sleep();
+        ros::spinOnce();
+    }
 
     return 0;
 }
