@@ -46,23 +46,27 @@ namespace pepper_image_sink {
         virtual void onInit() {
             private_nh = getPrivateNodeHandle();
             stream = true;
-            pub = private_nh.advertise<sensor_msgs::Image>("out", 10);
-            sub = private_nh.subscribe("in", 10, &PepperImageSink::callback, this);
+            c_pub = private_nh.advertise<sensor_msgs::Image>("out/color", 10);
+            c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+            d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
+            d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
             service = private_nh.advertiseService("image_stream_toggle", &PepperImageSink::toggle_cb, this);
         }
 
         bool toggle_cb(object_tracking_msgs::Recognize::Request &req, object_tracking_msgs::Recognize::Response &res) {
             stream = !stream;
             if (!stream) {
-                sub.shutdown();
+                c_sub.shutdown();
+                d_sub.shutdown();
             } else {
-                sub = private_nh.subscribe("in", 10, &PepperImageSink::callback, this);
+                c_sub = private_nh.subscribe("in", 10, &PepperImageSink::color_cb, this);
+                d_sub = private_nh.subscribe("in", 10, &PepperImageSink::depth_cb, this);
             }
         }
 
-        void callback(const sensor_msgs::CompressedImage::ConstPtr &input) {
+        void color_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
             try {
-                cv_ptr = cv_bridge::toCvCopy(input);
+                c_cv_ptr = cv_bridge::toCvCopy(input);
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -71,23 +75,47 @@ namespace pepper_image_sink {
 
 
             try {
-                output = cv_ptr->toImageMsg();
+                c_output = c_cv_ptr->toImageMsg();
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge !exception: %s", e.what());
                 return;
             }
-            pub.publish(output);
+            c_pub.publish(c_output);
+        }
+
+        void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
+            try {
+                d_cv_ptr = cv_bridge::toCvCopy(input);
+            }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge exception: %s", e.what());
+                return;
+            }
+
+
+            try {
+                d_output = d_cv_ptr->toImageMsg();
+            }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge !exception: %s", e.what());
+                return;
+            }
+            d_pub.publish(d_output);
         }
 
 
-        ros::Publisher pub;
-        ros::Subscriber sub;
+        ros::Publisher c_pub;
+        ros::Subscriber c_sub;
+        ros::Publisher d_pub;
+        ros::Subscriber d_sub;
         ros::ServiceServer service;
         ros::NodeHandle private_nh;
         bool stream;
-        cv_bridge::CvImagePtr cv_ptr;
-        sensor_msgs::ImagePtr output;
+        cv_bridge::CvImagePtr c_cv_ptr;
+        sensor_msgs::ImagePtr c_output;
+        cv_bridge::CvImagePtr d_cv_ptr;
+        sensor_msgs::ImagePtr d_output;
     };
 
     PLUGINLIB_DECLARE_CLASS(pepper_image_sink, PepperImageSink, pepper_image_sink::PepperImageSink, nodelet::Nodelet);

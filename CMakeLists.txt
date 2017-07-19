@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pepper_image_sink)
 
-find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge object_tracking_msgs )
+find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge object_tracking_msgs)
 
 find_package(OpenCV)
 

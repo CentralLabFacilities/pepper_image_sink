@@ -5,7 +5,7 @@
   <node pkg="nodelet" type="nodelet" name="PepperImageSink" args="load pepper_image_sink/PepperImageSink standalone_nodelet --no-bond" output="screen">
     <remap from="PepperImageSink/out/color" to="/pepper_robot/relay/front/image_raw"/>
     <remap from="PepperImageSink/in/color" to="/pepper_robot/camera/front/image_raw/compressed"/>
-    <remap from="PepperImageSink/out/depth" to="/pepper_robot/relay/front/image_raw"/>
-    <remap from="PepperImageSink/in/depth" to="/pepper_robot/camera/front/image_raw/compressed"/>
+    <remap from="PepperImageSink/out/depth" to="/pepper_robot/relay/depth/image_raw"/>
+    <remap from="PepperImageSink/in/depth" to="/pepper_robot/camera/depth/camera/image_raw/compressed"/>
   </node>
 </launch>
