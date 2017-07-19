@@ -141,6 +141,19 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
                 input->encoding.c_str());
 
     }
+
+    if (compressedImage.size() > 0)
+    {
+        ROS_DEBUG("Copying data");
+
+        for(auto i : compressedImage){
+            compressed.data.push_back(i);
+        }
+        
+    } else {
+        ROS_ERROR("Got empty Image!");
+    }
+
     pub_ptr.get()->publish(compressed);
 }
 
