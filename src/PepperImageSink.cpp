@@ -59,8 +59,8 @@ namespace pepper_image_sink {
                 c_sub.shutdown();
                 d_sub.shutdown();
             } else {
-                c_sub = private_nh.subscribe("in", 10, &PepperImageSink::color_cb, this);
-                d_sub = private_nh.subscribe("in", 10, &PepperImageSink::depth_cb, this);
+                c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+                d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
             }
         }
 
