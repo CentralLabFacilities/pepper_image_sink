@@ -124,7 +124,7 @@ namespace pepper_image_sink {
 //                d_pub.publish(d_cv_ptr->toImageMsg());
 //            }
             try {
-                d_cv_ptr = cv_bridge::toCvCopy(message);
+                d_cv_ptr = cv_bridge::toCvCopy(message, "mono16");
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge exception: %s", e.what());
