@@ -96,7 +96,7 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
     // Raw depth map compression
     if ((bitDepth == 16) && (numChannels == 1)) {
         params[0] = 16; // this is CV_IMWRITE_PNG_COMPRESSION, but I cant find the namespace
-        params[1] = 9;
+        params[1] = 4;
 
 
         // OpenCV-ROS bridge
