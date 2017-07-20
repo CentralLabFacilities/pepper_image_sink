@@ -94,35 +94,6 @@ namespace pepper_image_sink {
         }
 
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &message) {
-
-//            cv_bridge::CvImagePtr cv_ptr(new cv_bridge::CvImage);
-//
-//            // Copy message header
-//            d_cv_ptr->header = message->header;
-//
-//            // Assign image encoding
-//            std::string image_encoding = message->format.substr(0, message->format.find(';'));
-//            d_cv_ptr->encoding = image_encoding;
-//            std::vector <uint8_t> imageData;
-//
-//            ROS_DEBUG("Copying data");
-//
-//            for (int i = 0; i < message->data.size(); i++) {
-//                imageData.push_back(message->data[i]);
-//            }
-//            try {
-//                d_cv_ptr->image = cv::imdecode(imageData, CV_LOAD_IMAGE_UNCHANGED);
-//            }
-//            catch (cv::Exception &e) {
-//                ROS_ERROR("%s", e.what());
-//            }
-//
-//            size_t rows = d_cv_ptr->image.rows;
-//            size_t cols = d_cv_ptr->image.cols;
-//
-//            if ((rows > 0) && (cols > 0)) {
-//                d_pub.publish(d_cv_ptr->toImageMsg());
-//            }
             try {
                 d_cv_ptr = cv_bridge::toCvCopy(message, "mono16");
             }
