@@ -34,7 +34,17 @@
 #include <sensor_msgs/CompressedImage.h>
 #include <cv_bridge/cv_bridge.h>
 #include <object_tracking_msgs/Recognize.h>
+#include "compressed_depth_image_transport/compressed_depth_subscriber.h"
+#include <sensor_msgs/image_encodings.h>
+#include <opencv/cvwimage.h>
+#include <opencv/highgui.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 
+#include <limits>
+#include <vector>
+
+using namespace cv;
 namespace pepper_image_sink {
 
     class PepperImageSink : public nodelet::Nodelet {
@@ -84,23 +94,51 @@ namespace pepper_image_sink {
         }
 
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &message) {
-            try {
-                d_cv_ptr = cv_bridge::toCvCopy(message, "mono16");
+
+            // Copy message header
+            d_cv_ptr.reset(new cv_bridge::CvImage());
+            d_cv_ptr->header = message->header;
+
+            // Assign image encoding
+            std::string image_encoding = message->format.substr(0, message->format.find(';'));
+            d_cv_ptr->encoding = image_encoding;
+            std::vector <uint8_t> imageData;
+
+            ROS_DEBUG("Copying data");
+
+            for (int i = 0; i < message->data.size(); i++) {
+                imageData.push_back(message->data[i]);
             }
-            catch (cv_bridge::Exception &e) {
-                ROS_ERROR("cv_bridge exception: %s", e.what());
-                return;
+            try {
+                d_cv_ptr->image = cv::imdecode(imageData, CV_LOAD_IMAGE_UNCHANGED);
+            }
+            catch (cv::Exception &e) {
+                ROS_ERROR("%s", e.what());
             }
 
+            size_t rows = d_cv_ptr->image.rows;
+            size_t cols = d_cv_ptr->image.cols;
 
-            try {
-                d_output = d_cv_ptr->toImageMsg();
+            if ((rows > 0) && (cols > 0)) {
+                d_pub.publish(d_cv_ptr->toImageMsg());
             }
-            catch (cv_bridge::Exception &e) {
-                ROS_ERROR("cv_bridge !exception: %s", e.what());
-                return;
-            }
-            d_pub.publish(d_output);
+//            try {
+//                d_cv_ptr = cv_bridge::toCvCopy(message, "mono16");
+//            }
+//            catch (cv_bridge::Exception &e) {
+//                ROS_ERROR("cv_bridge exception: %s", e.what());
+//                return;
+//            }
+//
+//
+//            try {
+//                d_output = d_cv_ptr->toImageMsg();
+//            }
+//            catch (cv_bridge::Exception &e) {
+//                ROS_ERROR("cv_bridge !exception: %s", e.what());
+//                return;
+//            }
+//            d_pub.publish(d_output);
         }
 
 
