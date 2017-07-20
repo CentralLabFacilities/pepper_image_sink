@@ -32,7 +32,6 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CompressedImage.h>
-#include <std_msgs/Empty.h>
 #include <cv_bridge/cv_bridge.h>
 #include <object_tracking_msgs/Recognize.h>
 
@@ -86,7 +85,7 @@ namespace pepper_image_sink {
 
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
             try {
-                d_cv_ptr = cv_bridge::toCvCopy(input);
+                d_cv_ptr = cv_bridge::toCvCopy(input,"CV_16UC1");
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -118,5 +117,6 @@ namespace pepper_image_sink {
         sensor_msgs::ImagePtr d_output;
     };
 
-    PLUGINLIB_DECLARE_CLASS(pepper_image_sink, PepperImageSink, pepper_image_sink::PepperImageSink, nodelet::Nodelet);
+    PLUGINLIB_DECLARE_CLASS(pepper_image_sink, PepperImageSink, pepper_image_sink::PepperImageSink, nodelet::Nodelet
+    );
 }
