@@ -85,7 +85,7 @@ namespace pepper_image_sink {
 
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
             try {
-                d_cv_ptr = cv_bridge::toCvCopy(input,"mono16");
+                d_cv_ptr = cv_bridge::toCvCopy(input);
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge exception: %s", e.what());
