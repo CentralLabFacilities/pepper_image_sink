@@ -34,17 +34,7 @@
 #include <sensor_msgs/CompressedImage.h>
 #include <cv_bridge/cv_bridge.h>
 #include <object_tracking_msgs/Recognize.h>
-#include "compressed_depth_image_transport/compressed_depth_subscriber.h"
-#include <sensor_msgs/image_encodings.h>
-#include <opencv/cvwimage.h>
-#include <opencv/highgui.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgcodecs.hpp>
 
-#include <limits>
-#include <vector>
-
-using namespace cv;
 namespace pepper_image_sink {
 
     class PepperImageSink : public nodelet::Nodelet {
