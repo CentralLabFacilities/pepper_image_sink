@@ -23,7 +23,7 @@
     <node pkg="nodelet" type="nodelet" name="metric_rect"
           args="load depth_image_proc/convert_metric depth_manager_offload --no-bond">
         <remap from="image_raw" to="/pepper_robot/sink/depth/image_raw"/>
-        <remap from="image" to="/pepper_robot/sink/depth/image_raw"/>
+        <remap from="image" to="/pepper_robot/sink/depth/image_raw_32"/>
         <param name="queue_size" value="15"/>
     </node>
 </launch>
