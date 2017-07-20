@@ -5,7 +5,6 @@
 
     <node pkg="nodelet" type="nodelet" name="register_depth_offload" output="screen"
           args="load depth_image_proc/register depth_manager_offload --no-bond">
-
         <remap from="rgb/camera_info" to="/pepper_robot/camera/front/camera_info"/>
         <remap from="depth/camera_info" to="/pepper_robot/camera/depth/camera/camera_info"/>
         <remap from="depth/image_rect" to="/pepper_robot/sink/depth/image_raw"/>
@@ -16,7 +15,6 @@
 
     <node pkg="nodelet" type="nodelet" name="cloudify_offload" output="screen"
           args="load depth_image_proc/point_cloud_xyzrgb depth_manager_offload --no-bond">
-
         <remap from="rgb/camera_info" to="/pepper_robot/camera/front/camera_info"/>
         <remap from="rgb/image_rect_color" to="/pepper_robot/sink/front/image_raw"/>
         <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
