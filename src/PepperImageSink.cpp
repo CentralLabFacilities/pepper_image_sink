@@ -122,23 +122,6 @@ namespace pepper_image_sink {
             if ((rows > 0) && (cols > 0)) {
                 d_pub.publish(d_cv_ptr->toImageMsg());
             }
-//            try {
-//                d_cv_ptr = cv_bridge::toCvCopy(message, "mono16");
-//            }
-//            catch (cv_bridge::Exception &e) {
-//                ROS_ERROR("cv_bridge exception: %s", e.what());
-//                return;
-//            }
-//
-//
-//            try {
-//                d_output = d_cv_ptr->toImageMsg();
-//            }
-//            catch (cv_bridge::Exception &e) {
-//                ROS_ERROR("cv_bridge !exception: %s", e.what());
-//                return;
-//            }
-//            d_pub.publish(d_output);
         }
 
 
