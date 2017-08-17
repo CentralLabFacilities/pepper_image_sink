@@ -20,7 +20,7 @@ void callback_rgb(const sensor_msgs::Image::ConstPtr &input) {
     compressed.format = input->encoding;
 
     // Compression settings
-   std::vector<int> params;
+    std::vector<int> params;
     params.resize(3, 0);
 
     // Bit depth of image encoding
