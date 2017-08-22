@@ -9,7 +9,7 @@
         <remap from="depth/image_rect" to="/pepper_robot/sink/depth/image_raw"/>
         <remap from="depth_registered/camera_info" to="/pepper_robot/sink/depth_registered/camera_info"/>
         <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
-        <param name="queue_size" value="10"/>
+        <param name="queue_size" value="1"/>
     </node>
 
     <!-- This one makes a point cloud + RGB from the registered image -->
@@ -19,7 +19,7 @@
         <remap from="rgb/image_rect_color" to="/pepper_robot/sink/front/image_raw"/>
         <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
         <remap from="depth_registered/points" to="/pepper_robot/sink/depth/points"/>
-        <param name="queue_size" value="10"/>
+        <param name="queue_size" value="1"/>
     </node>
 
     <!-- This one converts the registered image to meters (metric) -->
@@ -27,7 +27,7 @@
           args="load depth_image_proc/convert_metric depth_manager_offload --no-bond">
         <remap from="image_raw" to="/pepper_robot/sink/depth_registered/image_rect"/>
         <remap from="image" to="/pepper_robot/sink/depth_registered/meters/image_rect"/>
-        <param name="queue_size" value="10"/>
+        <param name="queue_size" value="1"/>
     </node>
 </launch>
 
