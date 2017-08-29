@@ -33,9 +33,9 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <cv_bridge/cv_bridge.h>
-#include <object_tracking_msgs/Recognize.h>
-#include "compressed_depth_image_transport/compressed_depth_subscriber.h"
 #include <sensor_msgs/image_encodings.h>
+#include "compressed_depth_image_transport/compressed_depth_subscriber.h"
+
 #include <opencv/cvwimage.h>
 #include <opencv/highgui.h>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -52,25 +52,23 @@ namespace pepper_image_sink {
         PepperImageSink() {}
 
     private:
+
+        ros::Publisher c_pub;
+        ros::Subscriber c_sub;
+        ros::Publisher d_pub;
+        ros::Subscriber d_sub;
+        ros::NodeHandle private_nh;
+        cv_bridge::CvImagePtr c_cv_ptr;
+        sensor_msgs::ImagePtr c_output;
+        cv_bridge::CvImagePtr d_cv_ptr;
+        sensor_msgs::ImagePtr d_output;
+
         virtual void onInit() {
             private_nh = getPrivateNodeHandle();
-            stream = true;
             c_pub = private_nh.advertise<sensor_msgs::Image>("out/color", 10);
             c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
             d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
             d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
-            service = private_nh.advertiseService("image_stream_toggle", &PepperImageSink::toggle_cb, this);
-        }
-
-        bool toggle_cb(object_tracking_msgs::Recognize::Request &req, object_tracking_msgs::Recognize::Response &res) {
-            stream = !stream;
-            if (!stream) {
-                c_sub.shutdown();
-                d_sub.shutdown();
-            } else {
-                c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
-                d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
-            }
         }
 
         void color_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
@@ -123,19 +121,6 @@ namespace pepper_image_sink {
                 d_pub.publish(d_cv_ptr->toImageMsg());
             }
         }
-
-
-        ros::Publisher c_pub;
-        ros::Subscriber c_sub;
-        ros::Publisher d_pub;
-        ros::Subscriber d_sub;
-        ros::ServiceServer service;
-        ros::NodeHandle private_nh;
-        bool stream;
-        cv_bridge::CvImagePtr c_cv_ptr;
-        sensor_msgs::ImagePtr c_output;
-        cv_bridge::CvImagePtr d_cv_ptr;
-        sensor_msgs::ImagePtr d_output;
 
     };
 

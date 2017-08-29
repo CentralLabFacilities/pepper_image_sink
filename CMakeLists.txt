@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pepper_image_sink)
 
-find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge object_tracking_msgs)
+find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge)
 
 find_package(OpenCV)
 
@@ -28,5 +28,4 @@ install(TARGETS pepper_image_sink
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-install(FILES pepper_image_sink.xml launch/pepper_image_sink_offload.launch launch/pointcloud_offload.launch PepperImageSink_default.yaml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(FILES pepper_image_sink.xml launch/pepper_image_sink_offload.launch launch/pointcloud_offload.launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
