@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
     ros::Subscriber image_sub = nh.subscribe("/pepper_robot/camera/depth/camera/image_raw", 10, &callback_depth);
     pub_ptr.reset(new ros::Publisher(nh.advertise<sensor_msgs::CompressedImage>("/pepper_robot/camera/depth/camera/image_raw/compressed", 10)));
     while(ros::ok()){
-        ros::Duration(0.02).sleep();
+        ros::Duration(0.04).sleep();
         ros::spinOnce();
     }
     return 0;
