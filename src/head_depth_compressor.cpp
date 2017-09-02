@@ -87,17 +87,15 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
     int numChannels = enc::numChannels(input->encoding);
 
     // Compressed image data
-    std::vector <uint8_t> compressedImage;
+    std::vector<uint8_t> compressedImage;
 
     // Update ros message format header
     compressed.format += "; depth compressed";
-
 
     // Raw depth map compression
     if ((bitDepth == 16) && (numChannels == 1)) {
         params[0] = 16; // this is CV_IMWRITE_PNG_COMPRESSION, but I cant find the namespace
         params[1] = 4;
-
 
         // OpenCV-ROS bridge
         cv_bridge::CvImagePtr cv_ptr;
@@ -129,8 +127,7 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
             if (cv::imencode(".png", cv_ptr->image, compressedImage, params)) {
                 float cRatio = (float) (cv_ptr->image.rows * cv_ptr->image.cols * cv_ptr->image.elemSize())
                                / (float) compressedImage.size();
-                ROS_DEBUG("Compressed Depth Image Transport - Compression: 1:%.2f (%lu bytes)", cRatio,
-                          compressedImage.size());
+                ROS_DEBUG("Compressed Depth Image Transport - Compression: 1:%.2f (%lu bytes)", cRatio, compressedImage.size());
             } else {
                 ROS_ERROR("cv::imencode (png) failed on input image");
             }
@@ -139,40 +136,34 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
         ROS_ERROR(
                 "Compressed Depth Image Transport - Compression requires 16bit raw depth images (input format is: %s).",
                 input->encoding.c_str());
-
     }
 
     if (compressedImage.size() > 0)
     {
         ROS_DEBUG("Copying data");
-
-        for(int i = 0; i < compressedImage.size(); i++){
-            compressed.data.push_back(compressedImage[i]);
-        }
+        compressed.data = compressedImage;
+        // This might be inefficient
+        //for(int i = 0; i < compressedImage.size(); i++){
+        //    compressed.data.push_back(compressedImage[i]);
+        //}
 
     } else {
         ROS_ERROR("Got empty Image!");
+        return;
     }
 
     pub_ptr.get()->publish(compressed);
 }
 
 int main(int argc, char **argv) {
-
-    //init node
-    ros::init(argc, argv, "head_depth_compressor");
-
+    ros::init(argc, argv, "head_depth_compressor", ros::init_options::AnonymousName);
     ros::NodeHandle nh;
-
     ros::Subscriber image_sub = nh.subscribe("/pepper_robot/camera/depth/camera/image_raw", 10, &callback_depth);
-
     pub_ptr.reset(new ros::Publisher(nh.advertise<sensor_msgs::CompressedImage>("/pepper_robot/camera/depth/camera/image_raw/compressed", 10)));
-
     while(ros::ok()){
-        ros::Duration(0.06).sleep();
+        ros::Duration(0.02).sleep();
         ros::spinOnce();
     }
-
     return 0;
 }
 
