@@ -142,7 +142,7 @@ void callback_depth(const sensor_msgs::Image::ConstPtr &input) {
     {
         ROS_DEBUG("Copying data");
         compressed.data = compressedImage;
-        // This might be inefficient
+        // This might be in-efficient
         //for(int i = 0; i < compressedImage.size(); i++){
         //    compressed.data.push_back(compressedImage[i]);
         //}
