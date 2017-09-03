@@ -1,4 +1,5 @@
 <launch>
+    <!-- You CANNOT set the queue size to 1, it seems the timing is off then -->
     <node pkg="nodelet" type="nodelet" name="depth_manager_offload" args="manager"/>
 
     <!-- This one registers the depth image to the color image -->
