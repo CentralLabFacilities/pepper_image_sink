@@ -69,6 +69,7 @@ namespace pepper_image_sink {
             c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
             d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
             d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
+            ROS_INFO("Image Sink Nodelet 'onInit()' done.");
         }
 
         void color_cb(const sensor_msgs::CompressedImage::ConstPtr &input) {
