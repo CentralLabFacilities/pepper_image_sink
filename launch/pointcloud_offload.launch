@@ -2,6 +2,14 @@
     <!-- You CANNOT set the queue size to 1, it seems the timing is off then -->
     <node pkg="nodelet" type="nodelet" name="depth_manager_offload" args="manager"/>
 
+        <!-- This one converts the raw image to meters (metric) -->
+    <node pkg="nodelet" type="nodelet" name="metric_rect"
+          args="load depth_image_proc/convert_metric depth_manager_offload --no-bond">
+        <remap from="image_raw" to="/pepper_robot/sink/depth/image_raw"/>
+        <remap from="image" to="/pepper_robot/sink/depth/metric/image_raw"/>
+        <param name="queue_size" value="5"/>
+    </node>
+
     <!-- This one registers the depth image to the color image -->
     <node pkg="nodelet" type="nodelet" name="register_depth_offload" output="screen"
           args="load depth_image_proc/register depth_manager_offload --no-bond">
@@ -20,14 +28,6 @@
         <remap from="rgb/image_rect_color" to="/pepper_robot/sink/front/image_raw"/>
         <remap from="depth_registered/image_rect" to="/pepper_robot/sink/depth_registered/image_rect"/>
         <remap from="depth_registered/points" to="/pepper_robot/sink/depth/points"/>
-        <param name="queue_size" value="5"/>
-    </node>
-
-    <!-- This one converts the registered image to meters (metric) -->
-    <node pkg="nodelet" type="nodelet" name="metric_rect"
-          args="load depth_image_proc/convert_metric depth_manager_offload --no-bond">
-        <remap from="image_raw" to="/pepper_robot/sink/depth_registered/image_rect"/>
-        <remap from="image" to="/pepper_robot/sink/depth_registered/meters/image_rect"/>
         <param name="queue_size" value="5"/>
     </node>
 </launch>
