@@ -105,11 +105,10 @@ namespace pepper_image_sink {
             std::string image_encoding = message->format.substr(0, message->format.find(';'));
 
             d_cv_ptr->encoding = image_encoding;
-            d_cv_ptr->step = sizeof(unsigned char) * 2 * image.rows
 
             std::vector <uint8_t> imageData;
 
-            ROS_DEBUG("Copying data");
+            // ROS_DEBUG("Copying data");
 
             for (int i = 0; i < message->data.size(); i++) {
                 imageData.push_back(message->data[i]);
