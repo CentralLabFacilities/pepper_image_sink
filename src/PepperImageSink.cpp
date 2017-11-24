@@ -98,9 +98,15 @@ namespace pepper_image_sink {
             d_cv_ptr.reset(new cv_bridge::CvImage());
             d_cv_ptr->header = message->header;
 
+            size_t rows = d_cv_ptr->image.rows;
+            size_t cols = d_cv_ptr->image.cols;
+
             // Assign image encoding
             std::string image_encoding = message->format.substr(0, message->format.find(';'));
+
             d_cv_ptr->encoding = image_encoding;
+            d_cv_ptr->step = sizeof(unsigned char) * 2 * image.rows
+
             std::vector <uint8_t> imageData;
 
             ROS_DEBUG("Copying data");
@@ -114,9 +120,6 @@ namespace pepper_image_sink {
             catch (cv::Exception &e) {
                 ROS_ERROR("%s", e.what());
             }
-
-            size_t rows = d_cv_ptr->image.rows;
-            size_t cols = d_cv_ptr->image.cols;
 
             if ((rows > 0) && (cols > 0)) {
                 d_pub.publish(d_cv_ptr->toImageMsg());
