@@ -6,5 +6,6 @@
         <remap from="PepperImageSink/out/color" to="/pepper_robot/sink/front/image_raw"/>
         <remap from="PepperImageSink/in/depth" to="/pepper_robot/camera/depth/camera/image_raw/compressed"/>
         <remap from="PepperImageSink/out/depth" to="/pepper_robot/sink/depth/image_raw"/>
+        <param name="queue_size" value="5"/>
     </node>
 </launch>
