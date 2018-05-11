@@ -71,7 +71,8 @@ namespace pepper_image_sink {
             //c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
             d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
             //d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
-            stream_service = private_nh.advertiseService("enable_color_stream", &PepperImageSink::enable_color_stream, this);
+            color_stream_service = private_nh.advertiseService("enable_color_stream", &PepperImageSink::enable_color_stream, this);
+            depth_stream_service = private_nh.advertiseService("enable_depth_stream", &PepperImageSink::enable_depth_stream, this);
             ROS_INFO("Image Sink Nodelet 'onInit()' done.");
         }
 
