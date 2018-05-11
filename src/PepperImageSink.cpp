@@ -154,7 +154,7 @@ namespace pepper_image_sink {
             ROS_INFO("Depth Streaming Service called");
             if(req.enable) {
                 ROS_WARN("req enabled");
-                d_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+                d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
             } else {
                 ROS_WARN("req disabled");
                 if(d_sub != NULL) {
