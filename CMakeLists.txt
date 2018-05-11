@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(pepper_image_sink)
 
-find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge)
+find_package(catkin REQUIRED COMPONENTS nodelet roscpp std_msgs cv_bridge pepper_clf_msgs)
 
 find_package(OpenCV)
 
@@ -10,7 +10,7 @@ include_directories(${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 catkin_package(
   LIBRARIES pepper_image_sink
-  CATKIN_DEPENDS nodelet roscpp std_msgs
+  CATKIN_DEPENDS nodelet roscpp std_msgs pepper_clf_msgs
 )
 
 ## Create the nodelet tutorial library

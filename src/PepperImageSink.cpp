@@ -34,7 +34,6 @@
 #include <sensor_msgs/CompressedImage.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include "compressed_depth_image_transport/compressed_depth_subscriber.h"
 
 #include <opencv/cvwimage.h>
 #include <opencv/highgui.h>
@@ -43,6 +42,8 @@
 
 #include <limits>
 #include <vector>
+
+#include "pepper_clf_msgs/SetImageStreaming.h"
 
 using namespace cv;
 namespace pepper_image_sink {
@@ -57,6 +58,7 @@ namespace pepper_image_sink {
         ros::Subscriber c_sub;
         ros::Publisher d_pub;
         ros::Subscriber d_sub;
+        ros::ServiceServer stream_service;
         ros::NodeHandle private_nh;
         cv_bridge::CvImagePtr c_cv_ptr;
         sensor_msgs::ImagePtr c_output;
@@ -66,9 +68,10 @@ namespace pepper_image_sink {
         virtual void onInit() {
             private_nh = getPrivateNodeHandle();
             c_pub = private_nh.advertise<sensor_msgs::Image>("out/color", 10);
-            c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+            //c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
             d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
             d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
+            stream_service = private_nh.advertiseService("enable_color_stream", &PepperImageSink::enable_color_stream, this);
             ROS_INFO("Image Sink Nodelet 'onInit()' done.");
         }
 
@@ -125,6 +128,23 @@ namespace pepper_image_sink {
             }
         }
 
+        bool enable_color_stream(pepper_clf_msgs::SetImageStreaming::Request  &req,
+                 pepper_clf_msgs::SetImageStreaming::Response &res)
+        {
+            ROS_WARN("Streaming Service called");
+            if(req.enable) {
+                ROS_WARN("req enabled");
+                c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+            } else {
+                ROS_WARN("req disabled");
+                if(c_sub != NULL) {
+                    ROS_WARN("Shutdown");
+                    c_sub.shutdown();
+                }
+            }
+            res.success = true;
+            return true;
+        }
     };
 
     PLUGINLIB_DECLARE_CLASS(pepper_image_sink, PepperImageSink, pepper_image_sink::PepperImageSink, nodelet::Nodelet);
