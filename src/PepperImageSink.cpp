@@ -58,7 +58,8 @@ namespace pepper_image_sink {
         ros::Subscriber c_sub;
         ros::Publisher d_pub;
         ros::Subscriber d_sub;
-        ros::ServiceServer stream_service;
+        ros::ServiceServer color_stream_service;
+        ros::ServiceServer depth_stream_service;
         ros::NodeHandle private_nh;
         cv_bridge::CvImagePtr c_cv_ptr;
         sensor_msgs::ImagePtr c_output;
