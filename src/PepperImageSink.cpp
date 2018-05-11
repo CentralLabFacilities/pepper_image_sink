@@ -70,7 +70,7 @@ namespace pepper_image_sink {
             c_pub = private_nh.advertise<sensor_msgs::Image>("out/color", 10);
             //c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
             d_pub = private_nh.advertise<sensor_msgs::Image>("out/depth", 10);
-            d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
+            //d_sub = private_nh.subscribe("in/depth", 10, &PepperImageSink::depth_cb, this);
             stream_service = private_nh.advertiseService("enable_color_stream", &PepperImageSink::enable_color_stream, this);
             ROS_INFO("Image Sink Nodelet 'onInit()' done.");
         }
@@ -131,7 +131,7 @@ namespace pepper_image_sink {
         bool enable_color_stream(pepper_clf_msgs::SetImageStreaming::Request  &req,
                  pepper_clf_msgs::SetImageStreaming::Response &res)
         {
-            ROS_WARN("Streaming Service called");
+            ROS_INFO("Color Streaming Service called");
             if(req.enable) {
                 ROS_WARN("req enabled");
                 c_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
@@ -140,6 +140,24 @@ namespace pepper_image_sink {
                 if(c_sub != NULL) {
                     ROS_WARN("Shutdown");
                     c_sub.shutdown();
+                }
+            }
+            res.success = true;
+            return true;
+        }
+
+        bool enable_depth_stream(pepper_clf_msgs::SetImageStreaming::Request  &req,
+                 pepper_clf_msgs::SetImageStreaming::Response &res)
+        {
+            ROS_INFO("Depth Streaming Service called");
+            if(req.enable) {
+                ROS_WARN("req enabled");
+                d_sub = private_nh.subscribe("in/color", 10, &PepperImageSink::color_cb, this);
+            } else {
+                ROS_WARN("req disabled");
+                if(d_sub != NULL) {
+                    ROS_WARN("Shutdown");
+                    d_sub.shutdown();
                 }
             }
             res.success = true;
