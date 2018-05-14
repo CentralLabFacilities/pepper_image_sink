@@ -4,7 +4,7 @@
           args="load pepper_image_sink/PepperImageSink sink_manager --no-bond" output="screen">
         <remap from="PepperImageSink/in/color" to="/pepper_robot/camera/front/image_raw/compressed"/>
         <remap from="PepperImageSink/out/color" to="/pepper_robot/sink/front/image_raw"/>
-        <remap from="PepperImageSink/in/depth" to="/pepper_robot/camera/depth/image_raw"/>
+        <remap from="PepperImageSink/in/depth" to="/pepper_robot/camera/depth/image_raw/compressedDepth"/>
         <remap from="PepperImageSink/out/depth" to="/pepper_robot/sink/depth/image_raw"/>
         <param name="queue_size" value="5"/>
     </node>
