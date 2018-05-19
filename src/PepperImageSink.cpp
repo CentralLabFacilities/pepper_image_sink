@@ -99,6 +99,27 @@ namespace pepper_image_sink {
 
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &message) {
 
+            try {
+                d_cv_ptr = cv_bridge::toCvCopy(message,message->format.substr(0, message->format.find(';')));
+            }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge exception: %s", e.what());
+                return;
+            }
+
+            ROS_INFO("Depth image Encoding: %s", message->format.substr(0, message->format.find(';')));
+
+
+            try {
+                d_output = d_cv_ptr->toImageMsg();
+            }
+            catch (cv_bridge::Exception &e) {
+                ROS_ERROR("cv_bridge !exception: %s", e.what());
+                return;
+            }
+            d_pub.publish(d_output);
+
+            /*
             // Copy message header
             d_cv_ptr.reset(new cv_bridge::CvImage());
             d_cv_ptr->header = message->header;
@@ -129,7 +150,7 @@ namespace pepper_image_sink {
                 d_pub.publish(d_cv_ptr->toImageMsg());
             } else {
                 ROS_ERROR("rows or cols not greater than 0");
-            }
+            }*/
         }
 
         bool enable_color_stream(pepper_clf_msgs::SetImageStreaming::Request  &req,
