@@ -113,7 +113,7 @@ namespace pepper_image_sink {
 
             std::vector <uint8_t> imageData;
 
-            // ROS_DEBUG("Copying data");
+            ROS_INFO("Copying data");
 
             for (int i = 0; i < message->data.size(); i++) {
                 imageData.push_back(message->data[i]);
@@ -127,6 +127,8 @@ namespace pepper_image_sink {
 
             if ((rows > 0) && (cols > 0)) {
                 d_pub.publish(d_cv_ptr->toImageMsg());
+            } else {
+                ROS_ERROR("rows or cols not greater than 0");
             }
         }
 
