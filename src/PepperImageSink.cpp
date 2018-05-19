@@ -100,15 +100,12 @@ namespace pepper_image_sink {
         void depth_cb(const sensor_msgs::CompressedImage::ConstPtr &message) {
 
             try {
-                d_cv_ptr = cv_bridge::toCvCopy(message,message->format.substr(0, message->format.find(';')));
+                d_cv_ptr = cv_bridge::toCvCopy(message);
             }
             catch (cv_bridge::Exception &e) {
                 ROS_ERROR("cv_bridge exception: %s", e.what());
                 return;
             }
-
-            ROS_INFO("Depth image Encoding: %s", message->format.substr(0, message->format.find(';')));
-
 
             try {
                 d_output = d_cv_ptr->toImageMsg();
